@@ -1,6 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:moneymeter/model/transaction.dart';
+import 'package:moneymeter/model/Category.dart';
 
 class TransactionsDatabase {
   static final TransactionsDatabase instance = TransactionsDatabase._init();
@@ -26,6 +27,7 @@ class TransactionsDatabase {
     const textType = 'TEXT NOT NULL';
     const realType = 'REAL NOT NULL';
 
+    /// Create Table for Transactions
     await db.execute('''
 CREATE TABLE $tableTransaction (
  ${TransactionFields.id} $idType,
@@ -36,6 +38,17 @@ CREATE TABLE $tableTransaction (
  ${TransactionFields.amount} $realType
 )
 ''');
+
+    ///Create Table for Categories and accounts
+    await db.execute('''
+CREATE TABLE $tableTransaction (
+ ${CategoryFields.id} $idType,
+ ${CategoryFields.description} $textType,
+ ${CategoryFields.type} $textType
+)
+''');
+
+    ///TODO Insert default Categories
   }
 
   Future close() async {

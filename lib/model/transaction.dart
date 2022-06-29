@@ -1,16 +1,24 @@
-/// Dataclass hold a single money transaction 
+/// Dataclass hold a single money transaction
 
 const String tableTransaction = 'transactions';
 
-class TransactionFields{
-  static const List<String> values = ['id', description, account, category, timestamp, amount ];
-  static const String description = "description";
-  static const String account ="account";
-  static const String category = "category";
-  static const String timestamp = "timestamp";
-  static const String amount = "amount";
-  static const String id ="_id";
+class TransactionFields {
+  static const List<String> values = [
+    'id',
+    description,
+    account,
+    category,
+    timestamp,
+    amount
+  ];
+  static const String description = 'description';
+  static const String account = 'account';
+  static const String category = 'category';
+  static const String timestamp = 'timestamp';
+  static const String amount = 'amount';
+  static const String id = '_id';
 }
+
 class Transaction {
   String description;
   String account;
@@ -20,7 +28,7 @@ class Transaction {
   int? id;
 
   Transaction(
-      { this.id,
+      {this.id,
       required this.description,
       required this.account,
       required this.category,
@@ -37,9 +45,9 @@ class Transaction {
       TransactionFields.amount: amount
     };
   }
-  
+
   @override
   String toString() {
     return 'Transaction({id: $id, description: $description, account: $account, category: $category, timestamp: $timestamp, amount: $amount}';
-  }     
+  }
 }
