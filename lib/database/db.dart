@@ -1,7 +1,7 @@
+import 'package:moneymeter/model/category.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:moneymeter/model/transaction.dart';
-import 'package:moneymeter/model/Category.dart';
+import 'package:moneymeter/model/moneytransaction.dart';
 
 class TransactionsDatabase {
   static final TransactionsDatabase instance = TransactionsDatabase._init();
@@ -29,26 +29,30 @@ class TransactionsDatabase {
 
     /// Create Table for Transactions
     await db.execute('''
-CREATE TABLE $tableTransaction (
- ${TransactionFields.id} $idType,
- ${TransactionFields.account} $textType,
- ${TransactionFields.category} $textType,
- ${TransactionFields.description} $textType,
- ${TransactionFields.timestamp} $textType,
- ${TransactionFields.amount} $realType
+CREATE TABLE $tableMoneyTransaction (
+ ${MoneyTransactionFields.id} $idType,
+ ${MoneyTransactionFields.account} $textType,
+ ${MoneyTransactionFields.category} $textType,
+ ${MoneyTransactionFields.description} $textType,
+ ${MoneyTransactionFields.timestamp} $textType,
+ ${MoneyTransactionFields.amount} $realType
 )
 ''');
 
     ///Create Table for Categories and accounts
     await db.execute('''
-CREATE TABLE $tableTransaction (
+CREATE TABLE $tableCategory (
  ${CategoryFields.id} $idType,
  ${CategoryFields.description} $textType,
  ${CategoryFields.type} $textType
 )
 ''');
+  }
 
-    ///TODO Insert default Categories
+  Future<MoneyTransaction> createTransaction<T>(MoneyTransaction data) async {
+    final db = await instance.database;
+    final id = await db.insert(tableMoneyTransaction, data.toMap());
+    return data.copy(id: id);
   }
 
   Future close() async {
