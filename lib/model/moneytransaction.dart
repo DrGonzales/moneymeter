@@ -4,7 +4,7 @@ const String tableMoneyTransaction = 'moneytransactions';
 
 class MoneyTransactionFields {
   static const List<String> values = [
-    'id',
+    id,
     description,
     account,
     category,
@@ -16,7 +16,7 @@ class MoneyTransactionFields {
   static const String category = 'category';
   static const String timestamp = 'timestamp';
   static const String amount = 'amount';
-  static const String id = '_id';
+  static const String id = 'id';
 }
 
 class MoneyTransaction {
@@ -60,6 +60,14 @@ class MoneyTransaction {
           category: category ?? this.category,
           timestamp: timestamp ?? this.timestamp,
           amount: amount ?? this.amount);
+
+  static MoneyTransaction fromMap(Map<String, Object?> map) => MoneyTransaction(
+      id: map[MoneyTransactionFields.id] as int?,
+      description: map[MoneyTransactionFields.description] as String,
+      account: map[MoneyTransactionFields.account] as String,
+      category: map[MoneyTransactionFields.category] as String,
+      timestamp: DateTime.parse([MoneyTransactionFields.timestamp] as String),
+      amount: [MoneyTransactionFields.amount] as double);
 
   @override
   String toString() {
