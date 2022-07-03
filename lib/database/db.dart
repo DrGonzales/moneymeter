@@ -3,12 +3,12 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:moneymeter/model/moneytransaction.dart';
 
-class TransactionsDatabase {
-  static final TransactionsDatabase instance = TransactionsDatabase._init();
+class DB {
+  static final DB instance = DB._init();
 
   static Database? _database;
 
-  TransactionsDatabase._init();
+  DB._init();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -19,7 +19,7 @@ class TransactionsDatabase {
   Future<Database> _initDB(String db) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, db);
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    return await openDatabase(path, version: 1, onCreate: _createDB );
   }
 
   Future _createDB(Database db, int version) async {
@@ -92,13 +92,20 @@ CREATE TABLE $tableCategory (
     final db = await instance.database;
     final result = await db.query(tableCategory,
         columns: CategoryFields.values,
-        where: '$CategoryFields.id = ?',
+        where: '${CategoryFields.id} = ?',
         whereArgs: [id]);
     if (result.isNotEmpty) {
       return Category.fromMap(result.first);
     } else {
       throw Exception('Datensatz mit ID $id nicht gefudnen');
     }
+  }
+
+  Future<List<MoneyTransaction>> readAllTransactions() async {
+    final db = await instance.database;
+    final results =
+        await db.query(tableMoneyTransaction, columns: MoneyTransactionFields.values);
+    return results.map((result) => MoneyTransaction.fromMap(result)).toList();
   }
 
   Future<List<Category>> readAllCatgorys() async {
@@ -111,25 +118,25 @@ CREATE TABLE $tableCategory (
   Future<int> updateCategory(Category data) async {
     final db = await instance.database;
     return db.update(tableCategory, data.toMap(),
-        where: '$CategoryFields.id = ?', whereArgs: [data.id]);
+        where: '${CategoryFields.id} = ?', whereArgs: [data.id]);
   }
 
   Future<int> updateMoneyTransaction(MoneyTransaction data) async {
     final db = await instance.database;
     return db.update(tableMoneyTransaction, data.toMap(),
-        where: '$MoneyTransactionFields.id = ?', whereArgs: [data.id]);
+        where: '${MoneyTransactionFields.id} = ?', whereArgs: [data.id]);
   }
 
   Future<int> deleteCategory(int id) async {
     final db = await instance.database;
     return db.delete(tableCategory,
-        where: '$CategoryFields.id = ?', whereArgs: [id]);
+        where: '${CategoryFields.id} = ?', whereArgs: [id]);
   }
 
   Future<int> deleteTransaction(int id) async {
     final db = await instance.database;
     return db.delete(tableMoneyTransaction,
-        where: '$MoneyTransactionFields.id = ?', whereArgs: [id]);
+        where: '${MoneyTransactionFields.id} = ?', whereArgs: [id]);
   }
 
   Future close() async {

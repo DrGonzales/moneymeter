@@ -66,8 +66,8 @@ class MoneyTransaction {
       description: map[MoneyTransactionFields.description] as String,
       account: map[MoneyTransactionFields.account] as String,
       category: map[MoneyTransactionFields.category] as String,
-      timestamp: DateTime.parse([MoneyTransactionFields.timestamp] as String),
-      amount: [MoneyTransactionFields.amount] as double);
+      timestamp: DateTime.parse(map[MoneyTransactionFields.timestamp] as String),
+      amount: map[MoneyTransactionFields.amount] as double);
 
   @override
   String toString() {
